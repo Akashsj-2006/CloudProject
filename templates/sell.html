@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+
+{% block title %}Sell Items - MConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sell-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    
+    .page-title {
+        text-align: center;
+        color: var(--primary-color);
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+    }
+    
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    .image-upload {
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-bottom: 20px;
+    }
+    
+    .image-upload:hover {
+        border-color: var(--primary-color);
+        background: rgba(74, 111, 165, 0.03);
+    }
+    
+    .image-upload i {
+        font-size: 2.5rem;
+        color: #aaa;
+        margin-bottom: 10px;
+        display: block;
+    }
+    
+    .preview-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #eee;
+    }
+    
+    .price-input {
+        position: relative;
+    }
+    
+    .price-input:before {
+        content: '$';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        font-weight: 500;
+    }
+    
+    .price-input input {
+        padding-left: 30px !important;
+    }
+    
+    .submit-btn {
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 600;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+    
+    .submit-btn:hover {
+        background: #ff6a45;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .form-note {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .category-option {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .category-option:hover {
+        border-color: var(--primary-color);
+        background: rgba(74, 111, 165, 0.05);
+    }
+    
+    .category-option input[type="radio"] {
+        margin-right: 8px;
+    }
+    
+    .condition-options {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .condition-option {
+        flex: 1;
+        text-align: center;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .condition-option:hover {
+        border-color: var(--primary-color);
+    }
+    
+    .condition-option input[type="radio"] {
+        display: none;
+    }
+    
+    .condition-option input[type="radio"]:checked + .condition-label {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    .condition-option input[type="radio"]:checked + .condition-label:before {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .condition-label {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        padding-left: 25px;
+        color: #555;
+    }
+    
+    .condition-label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        transition: all 0.2s;
+    }
+    
+    @media (max-width: 768px) {
+        .sell-container {
+            padding: 20px 15px;
+        }
+        
+        .category-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .condition-options {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sell-container">
+    <h1 class="page-title">Sell Your Item</h1>
+    
+    <form id="sellForm" onsubmit="return validateForm()">
+        <!-- Item Details -->
+        <div class="form-group">
+            <label for="itemName">Item Title *</label>
+            <input type="text" id="itemName" class="form-control" placeholder="e.g., Calculus Textbook, iPhone 12, etc." required>
+        </div>
+        
+        <div class="form-group">
+            <label>Category *</label>
+            <div class="category-grid">
+                <label class="category-option">
+                    <input type="radio" name="category" value="Books" required> Books
+                </label>
+                <label class="category-option">
+                    <input type="radio" name="category" value="Electronics"> Electronics
+                </label>
+                <label class="category-option">
+                    <input type="radio" name="category" value="Clothing"> Clothing
+                </label>
+                <label class="category-option">
+                    <input type="radio" name="category" value="Furniture"> Furniture
+                </label>
+                <label class="category-option">
+                    <input type="radio" name="category" value="Vehicles"> Vehicles
+                </label>
+                <label class="category-option">
+                    <input type="radio" name="category" value="Other"> Other
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" class="form-control" placeholder="Provide details about the item, its condition, and any other relevant information" required></textarea>
+            <p class="form-note">Be honest and detailed to attract more buyers.</p>
+        </div>
+        
+        <div class="form-group">
+            <label>Condition *</label>
+            <div class="condition-options">
+                <div class="condition-option">
+                    <input type="radio" id="new" name="condition" value="New" required>
+                    <label for="new" class="condition-label">New</label>
+                </div>
+                <div class="condition-option">
+                    <input type="radio" id="excellent" name="condition" value="Excellent">
+                    <label for="excellent" class="condition-label">Excellent</label>
+                </div>
+                <div class="condition-option">
+                    <input type="radio" id="good" name="condition" value="Good">
+                    <label for="good" class="condition-label">Good</label>
+                </div>
+                <div class="condition-option">
+                    <input type="radio" id="fair" name="condition" value="Fair">
+                    <label for="fair" class="condition-label">Fair</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="price" class="price-input">Price *</label>
+            <input type="number" id="price" class="form-control" placeholder="0.00" min="0" step="0.01" required>
+            <p class="form-note">Enter the price in your local currency.</p>
+        </div>
+        
+        <div class="form-group">
+            <label>Upload Photos *</label>
+            <div class="image-upload" id="imageUpload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click or drag images to upload</p>
+                <p class="form-note">Up to 5 photos. First photo will be the main image.</p>
+            </div>
+            <div class="preview-images" id="previewContainer"></div>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+        </div>
+        
+        <div class="form-group">
+            <label for="location">Meetup Location *</label>
+            <select id="location" class="form-control" required>
+                <option value="" disabled selected>Select a location on campus</option>
+                <option value="library">Main Library</option>
+                <option value="student-center">Student Center</option>
+                <option value="cafeteria">Cafeteria</option>
+                <option value="dorm-lobby">Dorm Lobby</option>
+                <option value="other">Other (specify in description)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="contact">Contact Email *</label>
+            <input type="email" id="contact" class="form-control" placeholder="your.email@college.edu" required>
+            <p class="form-note">This will be shared with potential buyers.</p>
+        </div>
+        
+        <button type="submit" class="submit-btn">Publish Listing</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image upload preview
+    const imageUpload = document.getElementById('imageUpload');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const maxFiles = 5;
+    
+    imageUpload.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // Handle drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        imageUpload.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        imageUpload.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        imageUpload.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        imageUpload.style.borderColor = 'var(--accent-color)';
+        imageUpload.style.backgroundColor = 'rgba(255, 126, 95, 0.05)';
+    }
+    
+    function unhighlight() {
+        imageUpload.style.borderColor = '#ddd';
+        imageUpload.style.backgroundColor = '';
+    }
+    
+    // Handle dropped files
+    imageUpload.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+    
+    // Handle selected files
+    fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+    });
+    
+    function handleFiles(files) {
+        const currentFiles = previewContainer.querySelectorAll('.preview-image').length;
+        const remainingSlots = maxFiles - currentFiles;
+        
+        if (files.length > remainingSlots) {
+            alert(`You can only upload up to ${maxFiles} images.`);
+            return;
+        }
+        
+        Array.from(files).slice(0, remainingSlots).forEach(file => {
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload only image files.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const preview = document.createElement('div');
+                preview.className = 'preview-wrapper';
+                preview.innerHTML = `
+                    <img src="${e.target.result}" class="preview-image" alt="Preview">
+                    <button class="remove-image" onclick="this.parentNode.remove()">×</button>
+                `;
+                previewContainer.appendChild(preview);
+            };
+            
+            reader.readAsDataURL(file);
+        });
+    }
+    
+    // Form validation
+    function validateForm() {
+        const form = document.getElementById('sellForm');
+        const fileInputs = previewContainer.querySelectorAll('.preview-image');
+        
+        if (fileInputs.length === 0) {
+            alert('Please upload at least one image of your item.');
+            return false;
+        }
+        
+        // If all validations pass
+        alert('Your item has been listed successfully!');
+        form.reset();
+        previewContainer.innerHTML = '';
+        return false; // Prevent actual form submission for now
+    }
+    
+    // Add some interactivity to condition options
+    document.querySelectorAll('.condition-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Update styles
+            document.querySelectorAll('.condition-option').forEach(opt => {
+                opt.style.borderColor = '#ddd';
+                opt.style.backgroundColor = '';
+            });
+            
+            this.style.borderColor = 'var(--accent-color)';
+            this.style.backgroundColor = 'rgba(255, 126, 95, 0.05)';
+        });
+    });
+</script>
+{% endblock %}

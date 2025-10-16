@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero" style="text-align: center; padding: 60px 0; margin-bottom: 40px; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); border-radius: 10px;">
+        <h1 style="font-size: 2.8rem; margin-bottom: 20px; color: var(--primary-color);">Welcome to MConnect</h1>
+        <p class="subtitle" style="font-size: 1.2rem; color: var(--text-color); max-width: 700px; margin: 0 auto 30px;">Your campus marketplace for buying and selling second-hand items. Find great deals from your fellow students!</p>
+        <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 30px;">
+            <a href="#featured" class="btn" style="background-color: var(--primary-color);">Browse Items</a>
+            <a href="/sell" class="btn" style="background-color: white; color: var(--primary-color); border: 2px solid var(--primary-color);">Sell Now</a>
+        </div>
+        <div class="stats" style="display: flex; justify-content: center; gap: 30px; margin-top: 40px;">
+            <div class="stat-item">
+                <h3 style="font-size: 2rem; color: var(--accent-color); margin-bottom: 5px;">500+</h3>
+                <p>Items Listed</p>
+            </div>
+            <div class="stat-item">
+                <h3 style="font-size: 2rem; color: var(--accent-color); margin-bottom: 5px;">1K+</h3>
+                <p>Students</p>
+            </div>
+            <div class="stat-item">
+                <h3 style="font-size: 2rem; color: var(--accent-color); margin-bottom: 5px;">4.8★</h3>
+                <p>Rating</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" style="margin: 60px 0;">
+        <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-color);">Shop by Category</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+            <a href="#" class="category-card" style="background: white; padding: 20px; border-radius: 8px; text-align: center; text-decoration: none; color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--primary-color);">📚</div>
+                <h3>Books</h3>
+                <p style="color: #666; font-size: 0.9rem;">Textbooks & Novels</p>
+            </a>
+            <a href="#" class="category-card" style="background: white; padding: 20px; border-radius: 8px; text-align: center; text-decoration: none; color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--primary-color);">💻</div>
+                <h3>Electronics</h3>
+                <p style="color: #666; font-size: 0.9rem;">Laptops, Phones & More</p>
+            </a>
+            <a href="#" class="category-card" style="background: white; padding: 20px; border-radius: 8px; text-align: center; text-decoration: none; color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--primary-color);">👕</div>
+                <h3>Clothing</h3>
+                <p style="color: #666; font-size: 0.9rem;">Fashion & Accessories</p>
+            </a>
+            <a href="#" class="category-card" style="background: white; padding: 20px; border-radius: 8px; text-align: center; text-decoration: none; color: var(--text-color); box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px; color: var(--primary-color);">🏠</div>
+                <h3>Furniture</h3>
+                <p style="color: #666; font-size: 0.9rem;">Dorm & Room Essentials</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="featured" style="margin: 80px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 style="color: var(--primary-color);">Featured Items</h2>
+            <a href="#" style="color: var(--accent-color); text-decoration: none; font-weight: 500;">View All →</a>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px;">
+            {% for product in products %}
+            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer;"
+                 onclick="window.location.href='/product/{{ product.id }}';">
+                <div style="height: 180px; background: #f5f7fa; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    <div style="font-size: 3rem; color: #ccc;">
+                        {% if product.category == 'Books' %}📚
+                        {% elif product.category == 'Electronics' %}💻
+                        {% elif product.category == 'Vehicles' %}🚲
+                        {% else %}🛍️
+                        {% endif %}
+                    </div>
+                </div>
+                <div style="padding: 15px;">
+                    <h3 style="margin-bottom: 5px; color: var(--text-color);">{{ product.name }}</h3>
+                    <p style="color: var(--accent-color); font-weight: 600; font-size: 1.2rem; margin-bottom: 8px;">${{ "%.2f"|format(product.price) }}</p>
+                    <div style="display: flex; justify-content: space-between; color: #666; font-size: 0.9rem;">
+                        <span>{{ product.category }}</span>
+                        <span>Seller: {{ product.seller }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" style="background: white; padding: 40px; border-radius: 10px; margin: 60px 0; box-shadow: 0 2px 15px rgba(0,0,0,0.05);">
+        <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary-color);">How It Works</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center;">
+            <div class="step">
+                <div style="width: 70px; height: 70px; background: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.8rem; color: var(--primary-color);">1</div>
+                <h3>Create an Account</h3>
+                <p style="color: #666;">Sign up with your college email to get started</p>
+            </div>
+            <div class="step">
+                <div style="width: 70px; height: 70px; background: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.8rem; color: var(--primary-color);">2</div>
+                <h3>List Your Items</h3>
+                <p style="color: #666;">Take photos and add details about your items</p>
+            </div>
+            <div class="step">
+                <div style="width: 70px; height: 70px; background: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.8rem; color: var(--primary-color);">3</div>
+                <h3>Connect & Sell</h3>
+                <p style="color: #666;">Meet on campus and complete the transaction</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section style="margin: 80px 0;">
+        <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary-color);">What Students Say</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; background: var(--light-gray); border-radius: 50%; margin-right: 15px;"></div>
+                    <div>
+                        <h4 style="margin: 0;">Alex Johnson</h4>
+                        <div style="color: #ffc107;">★★★★★</div>
+                    </div>
+                </div>
+                <p style="color: #555; font-style: italic;">"Found my engineering textbooks at half the price! The seller was super nice and we met at the library. Super convenient!"</p>
+            </div>
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; background: var(--light-gray); border-radius: 50%; margin-right: 15px;"></div>
+                    <div>
+                        <h4 style="margin: 0;">Maria Garcia</h4>
+                        <div style="color: #ffc107;">★★★★★</div>
+                    </div>
+                </div>
+                <p style="color: #555; font-style: italic;">"Sold my old bike within a day! The platform is so easy to use and I got a fair price for it."</p>
+            </div>
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; background: var(--light-gray); border-radius: 50%; margin-right: 15px;"></div>
+                    <div>
+                        <h4 style="margin: 0;">James Wilson</h4>
+                        <div style="color: #ffc107;">★★★★☆</div>
+                    </div>
+                </div>
+                <p style="color: #555; font-style: italic;">"Great way to find affordable furniture for my dorm. Everything was as described and the meetup was smooth."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; padding: 60px 20px; border-radius: 10px; text-align: center; margin: 80px 0;">
+        <h2 style="margin-bottom: 20px; font-size: 2rem;">Ready to Start Selling?</h2>
+        <p style="max-width: 600px; margin: 0 auto 30px; opacity: 0.9;">Join hundreds of students who are already buying and selling on MConnect. It's free to list your items!</p>
+        <a href="/sell" class="btn" style="background: white; color: var(--primary-color); font-weight: 600; padding: 12px 30px; font-size: 1.1rem;">List Your First Item</a>
+    </section>
+
+    <style>
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Adjust for fixed header
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

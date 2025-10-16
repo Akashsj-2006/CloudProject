@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - MConnect{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 80px 20px;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <div style="font-size: 8rem; font-weight: 700; color: var(--primary-color); line-height: 1;">404</div>
+        <h1 style="font-size: 2.5rem; margin: 20px 0; color: var(--text-color);">Oops! Page Not Found</h1>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 30px;">
+            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        </p>
+        <div style="margin: 40px 0;">
+            <svg width="200" height="200" viewBox="0 0 200 200" style="max-width: 100%;">
+                <circle cx="100" cy="100" r="90" fill="#f5f7fa" />
+                <circle cx="70" cy="80" r="10" fill="#4a6fa5" />
+                <circle cx="130" cy="80" r="10" fill="#4a6fa5" />
+                <path d="M60 130 Q100 160 140 130" 
+                      stroke="#4a6fa5" 
+                      stroke-width="4" 
+                      fill="none" 
+                      stroke-linecap="round" />
+                <path d="M40 40 L30 30 M160 30 L150 40 M30 160 L40 150 M160 160 L150 150" 
+                      stroke="#ff7e5f" 
+                      stroke-width="3" 
+                      stroke-linecap="round" />
+                <path d="M100 30 L100 50 M30 100 H50 M170 100 H150 M100 170 V150" 
+                      stroke="#ff7e5f" 
+                      stroke-width="3" 
+                      stroke-linecap="round" 
+                      stroke-dasharray="2,4" />
+            </svg>
+        </div>
+        <div style="margin-top: 40px;">
+            <a href="/" class="btn" style="background-color: var(--primary-color); margin-right: 10px;">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="#" onclick="window.history.back()" class="btn" style="background-color: white; color: var(--primary-color); border: 2px solid var(--primary-color);">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </a>
+        </div>
+        <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: left;">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Looking for something specific?</h3>
+            <p>Try searching our marketplace or browse our categories:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                <a href="#" class="btn" style="background-color: #e9ecef; color: var(--text-color); padding: 8px 15px; font-size: 0.9rem;">Books</a>
+                <a href="#" class="btn" style="background-color: #e9ecef; color: var(--text-color); padding: 8px 15px; font-size: 0.9rem;">Electronics</a>
+                <a href="#" class="btn" style="background-color: #e9ecef; color: var(--text-color); padding: 8px 15px; font-size: 0.9rem;">Furniture</a>
+                <a href="#" class="btn" style="background-color: #e9ecef; color: var(--text-color); padding: 8px 15px; font-size: 0.9rem;">Clothing</a>
+                <a href="#" class="btn" style="background-color: #e9ecef; color: var(--text-color); padding: 8px 15px; font-size: 0.9rem;">Vehicles</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
